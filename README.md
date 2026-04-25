@@ -11,11 +11,12 @@ Built for the **Meta PyTorch / OpenEnv Hackathon 2026**.
 | Resource | URL |
 |---|---|
 | 🌀 **Live OpenEnv Space (HF)** | https://huggingface.co/spaces/jaivardhandrao/chaos-env |
-| 📓 **Colab training notebook** | `notebooks/colab_train.ipynb` (one-click reproducer) |
-| 📊 **Reward curve** | `logs/reward_curve.png` (after training) |
-| 📝 **Side-by-side transcripts** | `logs/before_after.md` (after eval) |
+| 💻 **Source code (GitHub)** | https://github.com/vibhuti2006/ChaosAgentGym-Forge |
+| 📓 **Colab training notebook** | [`notebooks/colab_train.ipynb`](notebooks/colab_train.ipynb) (one-click reproducer) |
+| 📑 **Slide deck** | [`notebooks/slides.md`](notebooks/slides.md) — render at https://web.marp.app |
+| 📊 **Reward curve** | `logs/reward_curve.png` (generated after training) |
+| 📝 **Side-by-side transcripts** | `logs/before_after.md` (generated after eval) |
 | 🎬 **Demo video** | _add link after recording_ |
-| 📑 **Slide deck** | _add link after upload_ |
 
 ## Talk to the live env in 4 lines
 
