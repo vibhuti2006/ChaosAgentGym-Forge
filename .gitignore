@@ -1,5 +1,12 @@
-# Logs and runtime artefacts
-logs/
+# Logs — ignore everything by default but explicitly include evidence files
+logs/*
+!logs/rewards.csv
+!logs/reward_curve.png
+!logs/quantitative.md
+!logs/quantitative.json
+!logs/behavior_diff.md
+!logs/before_after.md
+!logs/demos.jsonl
 *.log
 
 # Trained model weights (too big for git, ship via HF Hub)

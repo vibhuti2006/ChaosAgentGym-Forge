@@ -1,0 +1,31 @@
+[
+  {
+    "label": "RandomPolicy",
+    "n": 100,
+    "success_rate": 0.3,
+    "mean_return": -0.19750000000000004,
+    "stdev_return": 0.6719252829434131,
+    "mean_steps": 3.43,
+    "action_mix": {
+      "GET": 0.2303206997084548,
+      "PUT": 0.27405247813411077,
+      "RETRY": 0.23323615160349853,
+      "VERIFY": 0.26239067055393583
+    },
+    "failures_per_episode": 0.61
+  },
+  {
+    "label": "ScriptedPolicy (oracle baseline)",
+    "n": 100,
+    "success_rate": 0.89,
+    "mean_return": 0.8220000000000001,
+    "stdev_return": 0.4653835173078417,
+    "mean_steps": 5,
+    "action_mix": {
+      "GET": 0.4,
+      "PUT": 0.4,
+      "VERIFY": 0.2
+    },
+    "failures_per_episode": 1.43
+  }
+]
