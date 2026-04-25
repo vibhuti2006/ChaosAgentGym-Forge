@@ -1,0 +1,22 @@
+[project]
+name = "chaos_env"
+version = "0.1.0"
+description = "ChaosAgentGym — OpenEnv-compatible env for chaos-aware LLM agent training"
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core>=0.2,<0.3",
+    "fastmcp>=3.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["openenv_chaos", "env"]

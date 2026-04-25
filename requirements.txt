@@ -1,0 +1,9 @@
+torch>=2.1
+transformers>=4.44
+trl>=0.8.6,<0.13   # PPOTrainer.step(queries, responses, rewards) classic API
+accelerate>=0.33
+datasets>=2.20
+matplotlib
+numpy
+pandas
+tqdm

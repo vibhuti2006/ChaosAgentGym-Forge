@@ -1,0 +1,40 @@
+# Logs and runtime artefacts
+logs/
+*.log
+
+# Trained model weights (too big for git, ship via HF Hub)
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+ckpt_*/
+Training Result/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Large data
+*.zip
+*.tar.gz
+demos.jsonl
+results/

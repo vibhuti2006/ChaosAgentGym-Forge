@@ -1,0 +1,16 @@
+spec_version: 1
+name: chaos_env
+type: space
+runtime: fastapi
+app: openenv_chaos.server.app:app
+port: 8000
+description: |
+  ChaosAgentGym — an OpenEnv-compatible environment that teaches LLM agents
+  to survive failing tools (503s, stale reads, partial writes) instead of
+  looping on retries or confidently lying about success.
+tags:
+  - rl
+  - llm-agent
+  - chaos-engineering
+  - tool-use
+  - reliability
