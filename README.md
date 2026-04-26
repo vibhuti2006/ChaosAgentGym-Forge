@@ -4,7 +4,7 @@
 > failing tools** — 503s, stale reads, and partial writes — instead of looping
 > on retries or confidently lying about success.
 
-Built for the **Meta PyTorch / OpenEnv Hackathon 2026**.
+Built by **Team GraderOne** — Vibhuti Bhatnagar & Jaivardhan D Rao — for the **Meta PyTorch / OpenEnv Hackathon 2026**.
 
 ## Links
 
@@ -13,10 +13,9 @@ Built for the **Meta PyTorch / OpenEnv Hackathon 2026**.
 | 🌀 **Live OpenEnv Space (HF)** | https://huggingface.co/spaces/jaivardhandrao/chaos-env |
 | 💻 **Source code (GitHub)** | https://github.com/vibhuti2006/ChaosAgentGym-Forge |
 | 📓 **Colab training notebook** | [`notebooks/colab_train.ipynb`](notebooks/colab_train.ipynb) (one-click reproducer) |
-| 📑 **Slide deck** | [`notebooks/slides.md`](notebooks/slides.md) — render at https://web.marp.app |
-| 📊 **Reward curve** | `logs/reward_curve.png` (generated after training) |
-| 📝 **Side-by-side transcripts** | `logs/before_after.md` (generated after eval) |
-| 🎬 **Demo video** | _add link after recording_ |
+| ✍️ **HF blog (writeup)** | https://huggingface.co/spaces/jaivardhandrao/chaos-env/blob/main/Blog.md |
+| 📊 **Reward curve** | [`logs/reward_curve.png`](logs/reward_curve.png) |
+| 📝 **Side-by-side transcripts** | [`logs/before_after.md`](logs/before_after.md) |
 
 ## Talk to the live env in 4 lines
 
