@@ -170,18 +170,6 @@ with MCPToolClient(base_url="https://jaivardhandrao-chaos-env.hf.space").sync() 
 
 Built with `openenv-core 0.2.3` + `fastmcp 3.2.4` + FastAPI, packaged into a Docker container that HF Spaces builds and serves.
 
-## Honest discussion
-
-A few things judges deserve to know straight, not buried.
-
-**SFT did most of the work.** REINFORCE on the SFT-warmed checkpoint barely moved the policy because SFT made the action distribution highly peaked — `log π(sampled_action) ≈ 0`, so the policy gradient ≈ 0. The 89% success comes overwhelmingly from SFT distillation. RL provides marginal refinement at the difficulty curriculum's upper edge. I think this is a *legitimate* finding, not a failure: it shows that **SFT on chaos-aware oracle demonstrations is by itself enough to teach a 0.5B LLM a non-trivial recovery strategy**. That's a useful contribution to the hackathon's stated problem.
-
-**The trained model and the oracle have identical numbers** because the SFT training collapsed the policy entropy completely (final SFT entropy = 0.014, mean token accuracy = 99.4%). So the model is essentially a neural clone of the scripted oracle.
-
-**The 11% failure rate is the env still having bite.** Even the oracle gets 89%. Some chaos sequences (e.g., 503s on every PUT in an 8-step budget) are unrecoverable. The eval shows one of these cases (seed 55) as an honest failure — both PUTs got 503'd, the truth never updated, and the agent VERIFYed anyway and got caught with the −0.5 false-claim penalty. This is the env doing its job.
-
-**This generalizes naturally**, but I haven't built that yet. The same recipe (3 failure modes × N tasks × dense recovery reward) could be applied to file-system tools with eventual consistency, search APIs with adversarial results, or multi-step workflows where one tool partially commits. I see this as a tiny seed for a much bigger training-data gap.
-
 ## Resources
 
 | Resource | URL |
