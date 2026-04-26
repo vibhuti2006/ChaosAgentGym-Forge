@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChaosAgentGym — interactive console</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='24' height='24' rx='5' fill='none' stroke='%235ccfe6' stroke-width='2'/%3E%3Crect x='10' y='10' width='12' height='12' rx='2' fill='%23ff79c6' opacity='0.6'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo"></span>
+      Chaos<span class="accent">Agent</span>Gym
+      <span class="meta">// interactive env console</span>
+    </div>
+    <nav>
+      <a href="#playground">playground</a>
+      <a href="#eval">eval</a>
+      <a href="#run">run locally</a>
+      <a href="https://github.com/vibhuti2006/ChaosAgentGym-Forge" target="_blank" rel="noopener">github ↗</a>
+      <a href="https://huggingface.co/spaces/jaivardhandrao/chaos-env" target="_blank" rel="noopener">hf space ↗</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Teach an LLM agent to <span class="glitch">survive failing tools</span>.</h1>
+    <p>An OpenEnv-compatible environment where the API drops 503s, returns stale reads, and fakes successful writes. Below: drive the env yourself, watch policies run, and benchmark them across 100 seeds.</p>
+    <div class="pills">
+      <span class="pill"><span class="dot"></span>4 actions: GET / PUT / VERIFY / RETRY</span>
+      <span class="pill"><span class="dot magenta"></span>3 failure modes</span>
+      <span class="pill"><span class="dot orange"></span>3 task variants</span>
+      <span class="pill"><span class="dot green"></span>dense reward · 8 step budget</span>
+    </div>
+  </section>
+
+  <main>
+    <!-- ============================== PLAYGROUND =========================== -->
+    <section id="playground" class="row two">
+      <!-- LEFT: task + state -->
+      <div class="card task-card" id="task-card">
+        <div class="card-header">
+          <span class="title">
+            Task
+            <span class="badge" id="task-name-badge">update_email</span>
+          </span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-faint);">
+            divergence: <span id="diverge-flag" style="color:var(--green)">in sync</span>
+          </span>
+        </div>
+        <div class="card-body">
+          <p class="desc" id="task-desc">—</p>
+
+          <div class="kv">
+            <div class="k">user</div>     <div class="v cyan" id="task-user">u_42</div>
+            <div class="k">target</div>   <div class="v cyan" id="task-target">—</div>
+          </div>
+
+          <div class="store" id="store-visible" style="margin-top:18px"><span class="label">visible store · what GET sees</span>{}</div>
+          <div class="store truth" id="store-truth"><span class="label">ground truth · what VERIFY scores against</span>{}</div>
+
+          <div class="btn-row" style="margin-top:12px">
+            <button class="ghost" id="reveal-btn">Reveal truth</button>
+          </div>
+
+          <div class="metrics">
+            <div class="metric"><div class="label">return</div><div class="val" id="m-return">0.00</div></div>
+            <div class="metric"><div class="label">steps</div><div class="val" id="m-steps">0 / 8</div></div>
+            <div class="metric"><div class="label">failures</div><div class="val yellow" id="m-failures">0</div></div>
+            <div class="metric"><div class="label">status</div><div class="val yellow" id="m-status">running</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: action console + transcript -->
+      <div class="card">
+        <div class="card-header">
+          <span class="title">Action console</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-faint);">single JSON action per step</span>
+        </div>
+        <div class="card-body">
+          <div class="controls" style="margin-bottom:12px">
+            <div class="field">
+              <label for="task">Task variant</label>
+              <select id="task">
+                <option value="update_email">update_email</option>
+                <option value="rollback_partial">rollback_partial</option>
+                <option value="gdpr_anonymize">gdpr_anonymize</option>
+                <option value="mixed">mixed (curriculum)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="seed">Seed</label>
+              <input type="number" id="seed" value="7" min="0" max="999999" />
+            </div>
+            <div class="field">
+              <label for="difficulty">Difficulty <span class="val" id="difficulty-val" style="color:var(--cyan)">1.00</span></label>
+              <div class="range-row">
+                <input type="range" id="difficulty" min="0" max="1" step="0.05" value="1" />
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-bottom:14px">
+            <button class="primary" id="reset-btn">↻ Reset episode</button>
+            <button id="new-seed" class="ghost">🎲 random seed</button>
+          </div>
+
+          <div id="action-grid" class="action-grid">
+            <button class="action-btn" data-op="GET">
+              GET<span class="sub">read user record</span>
+            </button>
+            <button class="action-btn" data-op="PUT">
+              PUT<span class="sub">write patch</span>
+            </button>
+            <button class="action-btn" data-op="VERIFY">
+              VERIFY<span class="sub">terminal — check truth</span>
+            </button>
+            <button class="action-btn" data-op="RETRY">
+              RETRY<span class="sub">no-op</span>
+            </button>
+          </div>
+
+          <div class="put-input">
+            <label for="put-email">PUT/VERIFY email →</label>
+            <input type="text" id="put-email" />
+          </div>
+        </div>
+
+        <div class="policy-bar">
+          <span style="color:var(--text-faint)">auto-rollout</span>
+          <select id="policy-select">
+            <option value="Scripted">Scripted Oracle (PUT→GET→PUT→GET→VERIFY)</option>
+            <option value="Random">Random</option>
+            <option value="Naive">Naive (PUT then VERIFY)</option>
+          </select>
+          <button id="run-policy">▶ Run policy</button>
+          <span class="spacer"></span>
+          <span style="color:var(--text-faint)">step ≈ 550ms</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== TRANSCRIPT ============================ -->
+    <section class="card">
+      <div class="card-header">
+        <span class="title">Episode transcript</span>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text-faint);">
+          per-step reward = action cost (-0.05) ± retry penalty / recovery bonus / terminal
+        </span>
+      </div>
+      <div id="transcript" class="transcript"></div>
+    </section>
+
+    <!-- ============================== EVAL ================================== -->
+    <section id="eval" class="card">
+      <div class="card-header">
+        <span class="title">Quantitative evaluation</span>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text-faint);" id="eval-status">idle</span>
+      </div>
+      <div class="card-body">
+        <div class="eval-controls">
+          <div class="field">
+            <label for="eval-task">Task</label>
+            <select id="eval-task">
+              <option value="update_email">update_email</option>
+              <option value="rollback_partial">rollback_partial</option>
+              <option value="gdpr_anonymize">gdpr_anonymize</option>
+              <option value="mixed" selected>mixed (curriculum)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="eval-n">Episodes per policy</label>
+            <input type="number" id="eval-n" value="100" min="10" max="500" step="10" />
+          </div>
+          <button class="primary" id="run-eval">▶ Run benchmark</button>
+        </div>
+
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>policy</th>
+              <th>success</th>
+              <th>mean return</th>
+              <th>mean steps</th>
+              <th>fails / ep</th>
+              <th>premature VERIFY</th>
+              <th>defended VERIFY</th>
+            </tr>
+          </thead>
+          <tbody id="eval-tbody">
+            <tr><td colspan="7" style="text-align:center;color:var(--text-faint);padding:14px">click <em>Run benchmark</em> to populate</td></tr>
+          </tbody>
+        </table>
+
+        <div class="chart-wrap">
+          <svg id="reward-chart" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+          <div class="legend">
+            <span><span class="swatch" style="background:#5ccfe6"></span>Random</span>
+            <span><span class="swatch" style="background:#ffcc66"></span>Naive</span>
+            <span><span class="swatch" style="background:#a3e635"></span>Scripted Oracle</span>
+            <span style="color:var(--text-faint)">(thick line = 10-episode moving avg)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== RUN LOCALLY =========================== -->
+    <section id="run" class="row two">
+      <div class="card">
+        <div class="card-header"><span class="title">Run locally · sanity</span></div>
+        <div class="card-body">
+          <p style="margin-top:0;color:var(--text-dim)">No GPU. Validates the env, the pipeline, and the scripted baseline against 100 held-out seeds.</p>
+          <div class="code" data-code="pip install -r requirements.txt
+python -m env.smoke_test
+python -m training.test_pipeline
+python -m eval.quantitative --n_seeds 100"><button class="copy">copy</button>pip install -r requirements.txt
+python -m env.smoke_test
+python -m training.test_pipeline
+python -m eval.quantitative --n_seeds 100</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="title">Run locally · train</span></div>
+        <div class="card-body">
+          <p style="margin-top:0;color:var(--text-dim)">T4 ~30 min total: SFT warmup (~5m) → TRL PPO (~25m) → eval.</p>
+          <div class="code" data-code="python -m training.make_demo_dataset --n_episodes 300 --task_curriculum
+python -m training.sft_warmup --out logs/ckpt_sft
+python -m training.train_trl --model logs/ckpt_sft --episodes 200 --task_curriculum
+python -m eval.plot_rewards
+python -m eval.behavior_diff --base Qwen/Qwen2.5-0.5B-Instruct --trained logs/ckpt_final"><button class="copy">copy</button>python -m training.make_demo_dataset --n_episodes 300 --task_curriculum
+python -m training.sft_warmup --out logs/ckpt_sft
+python -m training.train_trl --model logs/ckpt_sft --episodes 200 --task_curriculum
+python -m eval.plot_rewards
+python -m eval.behavior_diff --base Qwen/Qwen2.5-0.5B-Instruct --trained logs/ckpt_final</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header"><span class="title">Talk to the live OpenEnv space</span></div>
+      <div class="card-body">
+        <p style="margin-top:0;color:var(--text-dim)">The same env shipped as a public OpenEnv MCP server on Hugging Face Spaces. Four lines of Python:</p>
+        <div class="code" data-code="# pip install openenv-core fastmcp
+from openenv.core.mcp_client import MCPToolClient
+
+with MCPToolClient(base_url='https://jaivardhandrao-chaos-env.hf.space').sync() as env:
+    env.reset(seed=7)
+    print(env.call_tool('read_task'))"><button class="copy">copy</button># pip install openenv-core fastmcp
+from openenv.core.mcp_client import MCPToolClient
+
+with MCPToolClient(base_url='https://jaivardhandrao-chaos-env.hf.space').sync() as env:
+    env.reset(seed=7)
+    print(env.call_tool('read_task'))</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    ChaosAgentGym · Meta PyTorch / OpenEnv Hackathon 2026 · this console runs the env entirely in JS — Python pipeline lives in <span style="color:var(--cyan)">training/</span> + <span style="color:var(--cyan)">eval/</span>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
