@@ -1,7 +1,7 @@
 # ChaosAgentGym: Teaching LLM Agents to Survive Failing Tools
 
-> *Built for the Meta PyTorch / OpenEnv Hackathon 2026.
-> Author: Vibhuti Bhatnagar.*
+> *Built by **Team GraderOne** for the Meta PyTorch / OpenEnv Hackathon 2026.
+> Authors: Vibhuti Bhatnagar, Jaivardhan D Rao.*
 
 ## TL;DR
 

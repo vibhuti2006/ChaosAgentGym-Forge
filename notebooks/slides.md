@@ -196,7 +196,7 @@ The same recipe extends naturally to:
 📓 **Code + Colab notebook**: _add GitHub link_
 📊 **Reward curve, transcripts, eval tables**: in the project README
 
-Built by **Vibhuti Bhatnagar** for the
-**Meta PyTorch / OpenEnv Hackathon 2026**
+Built by **Team GraderOne** — Vibhuti Bhatnagar & Jaivardhan D Rao
+for the **Meta PyTorch / OpenEnv Hackathon 2026**
 
 *Thank you.*
